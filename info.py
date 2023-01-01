@@ -85,7 +85,7 @@ SPL_DELETE_TIME = int(environ.get('SPL_DELETE_TIME', 15))
 
 # URL SHORTNER
 
-URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'https://mdiskshortner.link/')
+URL_SHORTENR_WEBSITE = environ.get('URL_SHORTENR_WEBSITE', 'https://mdiskshortner.link/api?')
 URL_SHORTNER_WEBSITE_API = environ.get('URL_SHORTNER_WEBSITE_API', '9b609109e0bc080c384458917045a2cbed3f16e1')
 
 LOG_STR = "Current Cusomized Configurations are:-\n"
