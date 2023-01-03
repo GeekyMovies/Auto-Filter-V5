@@ -17,7 +17,7 @@ API_ID = int(environ.get('API_ID', '23311160'))
 API_HASH = environ.get('API_HASH', '2a1366013eca4256bce853346dbcda49')
 BOT_TOKEN = environ.get('BOT_TOKEN', "5823060125:AAHQGGkl7MGCJcz42n0taJBik2o9W45uHig")
 BOT_USERNAME = os.getenv("BOT_USERNAME", "geekyofficialbot")
-BOT_SESSION_NAME = os.getenv("BOT_SESSION_NAME", "Geekybot")
+
 
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
