@@ -18,27 +18,24 @@ API_HASH = environ.get('API_HASH', '2a1366013eca4256bce853346dbcda49')
 BOT_TOKEN = environ.get('BOT_TOKEN', "5823060125:AAHQGGkl7MGCJcz42n0taJBik2o9W45uHig")
 BOT_USERNAME = environ.get("BOT_USERNAME", "geekyofficialbot")
 BOT_SESSION_NAME = environ.get("BOT_SESSION_NAME", "geekybot")
- ABOUT_BOT_TEXT = """<b>This is Mdisk Search Bot.
+ABOUT_BOT_TEXT = """<b>This is Mdisk Search Bot.
 🤖 My Name: <a href='https://t.me/cyniteofficial'>Mdisk Search Robot</a>
 📝 Language : <a href='https://www.python.org'> Python V3</a>
 📚 Library: <a href='https://docs.pyrogram.org'> Pyrogram</a>
 📡 Server: <a href='https://heroku.com'>Heroku</a>
 👨‍💻 Created By: <a href='https://t.me/cyniteofficial'>Cynite</a></b>
 """
-
-    ABOUT_HELP_TEXT = """<b>👨‍💻 Developer : <a href='https://t.me/cyniteofficial'>Click Me</a>
+ABOUT_HELP_TEXT = """<b>👨‍💻 Developer : <a href='https://t.me/cyniteofficial'>Click Me</a>
 If You Want Your Own Bot Like This Then You Can Contact Our Developer.</b>
 """
-
-    HOME_TEXT = """
+HOME_TEXT = """
 <b>Hey! {}😅,
 I'm Mdisk Search Robot.🤖</a>
 I Can Search 🔍 What You Want❗
 <a>Made With ❤ By @Cyniteofficial</a></b>
 """
 
-
-    START_MSG = """
+START_MSG = """
 <b>Hey! {}😅,
 I'm Mdisk Search Robot.🤖</a>
 I Can Search 🔍 What You Want❗
