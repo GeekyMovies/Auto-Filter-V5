@@ -37,7 +37,7 @@ TIMEZONE = (os.environ.get("TIMEZONE", "Asia/Kolkata"))
 
 # Bot Client for Inline Search
 Bot = Client(
-    session_name=BOT_SESSION_NAME,
+    name=BOT_SESSION_NAME,
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=BOT_TOKEN
@@ -45,7 +45,7 @@ Bot = Client(
 
 # User Client for Searching in Channel.
 User = Client(
-    session_name=USER_SESSION_STRING,
+
     api_id=API_ID,
     api_hash=API_HASH
 )
