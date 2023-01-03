@@ -18,7 +18,7 @@ from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
 from database.users_chats_db import db
-from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME  
+from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME  
 from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
@@ -234,7 +234,6 @@ class Bot(Client):
 
 # Bot Client for Inline Search
     Bot = Client(
-        session_name=BOT_SESSION_NAME,
         api_id=API_ID,
         api_hash=API_HASH,
         bot_token=BOT_TOKEN,
