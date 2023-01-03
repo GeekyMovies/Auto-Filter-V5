@@ -18,7 +18,7 @@ from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
 from database.users_chats_db import db
-from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT
+from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME  
 from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
@@ -148,20 +148,20 @@ class Bot(Client):
                 group_info = await db.get_group(str(event.chat_id).replace("-100", ""))
 
                 if group_info["has_access"] and group_info["db_channel"] and await db.is_group_verified(str(event.chat_id).replace("-100", "")):
-                    CHANNEL_ID = group_info["db_channel"]
+                    CHANNELS = group_info["db_channel"]
                 else:
-                    CHANNEL_ID = CHANNEL_ID
+                    CHANNELS = CHANNELS
             else:
-                CHANNEL_ID = CHANNEL_ID
+                CHANNELS = CHANNELS
 
 
             async for i in AsyncIter(re.sub("__|\*", "", args).split()):
                 if len(i) > 2:
                
-                    search_msg = client.iter_messages(CHANNEL_ID, limit=5, search=i)
+                    search_msg = client.iter_messages(CHANNELS, limit=5, search=i)
                     search.append(search_msg)
 
-            username = UPDATES_CHANNEL_USERNAME
+            username = UPDATES_CHANNEL_USERNAME 
             answer = f'**Join** [@{username}](https://telegram.me/{username}) \n\n'
 
             c = 0
@@ -197,7 +197,7 @@ class Bot(Client):
             else:
                 pass
 
-            answer += f"\n\n**Uploaded By @{UPDATES_CHANNEL_USERNAME}**"
+            answer += f"\n\n**Uploaded By @{UPDATES_CHANNEL_USERNAME }**"
             answer = await replace_username(answer)
             html_content = await markdown_to_html(answer)
             html_content = await make_bold(html_content)
