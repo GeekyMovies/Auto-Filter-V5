@@ -100,6 +100,7 @@ class Bot(Client):
                 for message in app.iter_messages("pyrogram", 1, 15000):
                     print(message.text)
         """
+        
         current = offset
         while True:
             new_diff = min(200, limit - current)
@@ -109,6 +110,220 @@ class Bot(Client):
             for message in messages:
                 yield message
                 current += 1
+        @tbot.on(events.NewMessage(incoming=True))
+async def message_handler(event):
+    try:
+        if event.message.post:
+            return
+
+        # if event.is_channel:return
+        if event.text.startswith("/"):return
+
+        print("\n")
+        print("Message Received: " + event.text)
+
+        # Force Subscription
+        if  not await get_user_join(event.sender_id):
+            haha = await event.reply(f'''**Hey! {event.sender.first_name} 😃**
+**You Have To Join Our Update Channel To Use Me ✅**
+**Click Below Button To Join Now.👇🏻**''', buttons=Button.url('🍿Updates Channel🍿', f'https://t.me/{Config.UPDATES_CHANNEL_USERNAME}'))
+            await asyncio.sleep(Config.AUTO_DELETE_TIME)
+            return await haha.delete()
+
+        args = event.text
+        args = await validate_q(args)
+
+        print("Search Query: {args}".format(args=args))
+        print("\n")
+
+        if not args:
+            return
+
+        txt = await event.reply('**Printing Links For "{}" 🔍**'.format(event.text))
+
+
+
+        search = []
+        if event.is_group or event.is_channel:
+            group_info = await db.get_group(str(event.chat_id).replace("-100", ""))
+
+            if group_info["has_access"] and group_info["db_channel"] and await db.is_group_verified(str(event.chat_id).replace("-100", "")):
+                CHANNEL_ID = group_info["db_channel"]
+            else:
+                CHANNEL_ID = Config.CHANNEL_ID
+        else:
+            CHANNEL_ID = Config.CHANNEL_ID
+
+
+        async for i in AsyncIter(re.sub("__|\*", "", args).split()):
+            if len(i) > 2:
+               
+                search_msg = client.iter_messages(CHANNEL_ID, limit=5, search=i)
+                search.append(search_msg)
+
+        username = Config.UPDATES_CHANNEL_USERNAME
+        answer = f'**Join** [@{username}](https://telegram.me/{username}) \n\n'
+
+        c = 0
+
+        async for msg_list in AsyncIter(search):
+            async for msg in msg_list:
+                c += 1
+                f_text = re.sub("__|\*", "", msg.text)
+
+                f_text = await link_to_hyperlink(f_text)
+                answer += f'\n\n\n✅ PAGE {c}:\n\n━━━━━━━━━\n\n' + '' + f_text.split("\n", 1)[0] + '' + '\n\n' + '' + f_text.split("\n", 2)[
+                    -1] + "\n\n"
+                
+            # break
+        finalsearch = []
+        async for msg in AsyncIter(search):
+            finalsearch.append(msg)
+
+        if c <= 0:
+            answer = f'''** Sorry {event.sender.first_name} No Results Found For {event.text}**
+**Please check the spelling on** [Google](http://www.google.com/search?q={event.text.replace(' ', '%20')}%20Movie) 🔍
+**Click On The Help To Know How To Watch**
+    '''
+
+            newbutton = [Button.url('Help🙋',
+                                    f'https://t.me/postsearchbot?start=Watch')]
+
+            await txt.delete()
+            result = await event.reply(answer, buttons=newbutton, link_preview=False)
+            await asyncio.sleep(Config.AUTO_DELETE_TIME)
+            await event.delete()
+            return await result.delete()
+        else:
+            pass
+
+        answer += f"\n\n**Uploaded By @{Config.UPDATES_CHANNEL_USERNAME}**"
+        answer = await replace_username(answer)
+        html_content = await markdown_to_html(answer)
+        html_content = await make_bold(html_content)
+        
+        tgraph_result = await telegraph_handler(
+            html=html_content,
+            title=event.text,
+            author=Config.BOT_USERNAME
+        )
+        message = f'**Click Here 👇 For "{event.text}"**\n\n[🍿🎬 {str(event.text).upper()}\n🍿🎬 {str("Click me for results").upper()}]({tgraph_result})'
+
+        newbutton = [Button.url('How To Watch ❓',
+                                    f'https://t.me/postsearchbot?start=Watch')]
+
+        await txt.delete()
+        await asyncio.sleep(0.5)
+        result = await event.reply(message, buttons=newbutton, link_preview=False)
+        await asyncio.sleep(Config.AUTO_DELETE_TIME)
+        # await event.delete()
+        return await result.delete()
+
+    except Exception as e:
+        print(e)
+        await txt.delete()
+        result = await event.reply("I am Unable Search,Please Search In @PostSearchBOT🙏")
+        await asyncio.sleep(Config.AUTO_DELETE_TIME)
+        await event.delete() 
+        return await result.delete()
+
+
+async def escape_url(str):
+    escape_url = urllib.parse.quote(str)
+    return escape_url
+
+# Bot Client for Inline Search
+Bot = Client(
+    session_name=Config.BOT_SESSION_NAME,
+    api_id=Config.API_ID,
+    api_hash=Config.API_HASH,
+    bot_token=Config.BOT_TOKEN,
+    plugins=dict(root="plugins")
+)
+
+@Bot.on_message(filters.incoming)
+async def inline_handlers(_, event: Message):
+    if event.text == '/start':
+        return
+    answers = f'**📂 Results For ➠ {event.text} \n\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n➠ Type Only Movie Name With Correct Spelling.✍️\n➠ Add Year For Better Result.🗓️\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n\n**'
+    async for message in User.search_messages(chat_id=Config.CHANNEL_ID, limit=50, query=event.text):
+        if message.text:
+            thumb = None
+            f_text = message.text
+            msg_text = message.text.html
+            if "|||" in message.text:
+                f_text = message.text.split("|||", 1)[0]
+                msg_text = message.text.html.split("|||", 1)[0]
+            answers += f'**🍿 Title ➠ ' + '' + f_text.split("\n", 1)[0] + '' + '\n\n📜 About ➠ ' + '' + f_text.split("\n", 2)[-1] + ' \n\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\nLink Will Auto Delete In 60Sec...⏰\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n\n**'
+    try:
+        msg = await event.reply_text(answers)
+        await asyncio.sleep(60)
+        await event.delete()
+        await msg.delete()
+    except:
+        print(f"[{Config.BOT_SESSION_NAME}] - Failed to Answer - {event.from_user.first_name}")
+
+
+@Bot.on_callback_query()
+async def button(bot, cmd: CallbackQuery):
+        cb_data = cmd.data
+        if "About_msg" in cb_data:
+            await cmd.message.edit(
+			text=Config.ABOUT_BOT_TEXT,
+			disable_web_page_preview=True,
+			reply_markup=InlineKeyboardMarkup(
+				[
+					[
+						InlineKeyboardButton("Our Channel", url="https://t.me/MOVIES_ZILAA"),
+						InlineKeyboardButton("Join", url="https://t.me/Official_Movies_Group")
+					],
+					[
+						InlineKeyboardButton("Creator", url="https://t.me/Am_RoBots"),
+						InlineKeyboardButton("Home", callback_data="gohome")
+					]
+				]
+			),
+			parse_mode="html"
+		)
+        elif "Help_msg" in cb_data:
+            await cmd.message.edit(
+			text=Config.ABOUT_HELP_TEXT,
+			disable_web_page_preview=True,
+			reply_markup=InlineKeyboardMarkup(
+				[
+					[
+						InlineKeyboardButton("About", callback_data="About_msg"),
+						InlineKeyboardButton("Our Channel", url="https://t.me/sources_cods")
+					], 
+                                        [
+						InlineKeyboardButton("Owner", url="https://t.me/Am_RoBots"),
+						InlineKeyboardButton("Home", callback_data="gohome")
+					]
+				]
+			),
+			parse_mode="html"
+		)
+        elif "gohome" in cb_data:
+            await cmd.message.edit(
+			text=Config.START_MSG.format(cmd.from_user.mention),
+			disable_web_page_preview=True,
+			reply_markup=InlineKeyboardMarkup(
+				[
+                                        [
+						InlineKeyboardButton("Help", callback_data="Help_msg"),
+						InlineKeyboardButton("About", callback_data="About_msg")
+					],
+					[
+						InlineKeyboardButton("Support", url="https://t.me/Am_RoBots"),
+						InlineKeyboardButton("Channel", url="https://t.me/sources_cods")
+					]
+				]
+			),
+			parse_mode="html"
+		)
+
+
+
 
 
 app = Bot()
