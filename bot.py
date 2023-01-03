@@ -3,8 +3,37 @@ from pyrogram import Client, filters, idle
 from pyrogram.errors import QueryIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InlineQuery, InlineQueryResultArticle, \
     InputTextMessageContent
-from TeamTeleRoid.forcesub import ForceSub
 import asyncio
+
+
+#My import 
+
+import os
+import math
+import logging
+import logging.config
+from aiohttp import web
+from CYNITE import web_server
+
+# Get logging configurations
+logging.config.fileConfig('logging.conf')
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
+logging.getLogger("imdbpy").setLevel(logging.ERROR)
+
+from pyrogram.errors import BadRequest, Unauthorized
+from datetime import datetime
+from pytz import timezone
+from pyrogram import Client, __version__
+from pyrogram.raw.all import layer
+from database.ia_filterdb import Media
+from database.users_chats_db import db
+from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME  
+from utils import temp
+from typing import Union, Optional, AsyncGenerator
+from pyrogram import types
+LOGGER = logging.getLogger(__name__)
+TIMEZONE = (os.environ.get("TIMEZONE", "Asia/Kolkata"))
 
 # Bot Client for Inline Search
 Bot = Client(
