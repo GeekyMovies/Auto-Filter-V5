@@ -234,7 +234,7 @@ class Bot(Client):
 
 # Bot Client for Inline Search
     Bot = Client(
-        session_name=CBOT_SESSION_NAME,
+        session_name=BOT_SESSION_NAME,
         api_id=API_ID,
         api_hash=API_HASH,
         bot_token=BOT_TOKEN,
