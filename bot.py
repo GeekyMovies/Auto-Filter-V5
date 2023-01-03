@@ -37,15 +37,15 @@ TIMEZONE = (os.environ.get("TIMEZONE", "Asia/Kolkata"))
 
 # Bot Client for Inline Search
 Bot = Client(
-    def __init__(self):
-        super().__init__(
-            name=SESSION,
-            api_id=API_ID,
-            api_hash=API_HASH,
-            bot_token=BOT_TOKEN,
-            workers=50,
-            plugins={"root": "CYNITE"},
-            sleep_threshold=5,
+	def __init__(self):
+	super().__init__(
+		name=SESSION,
+		api_id=API_ID,
+		api_hash=API_HASH,
+		bot_token=BOT_TOKEN,
+		workers=50,
+		plugins={"root": "CYNITE"},
+		sleep_threshold=5,
         )
 )
 
