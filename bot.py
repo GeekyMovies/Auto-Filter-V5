@@ -4,6 +4,7 @@ import logging
 import logging.config
 from aiohttp import web
 from CYNITE import web_server
+from configs import Config
 
 # Get logging configurations
 logging.config.fileConfig('logging.conf')
