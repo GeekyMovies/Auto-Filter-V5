@@ -42,6 +42,7 @@ DATABASE_NAME = environ.get('DATABASE_NAME', "Geekymovies")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
 # Channel Button Links
+UPDATES_CHANNEL_USERNAME = os.getenv("UPDATES_CHANNEL_USERNAME", "geeky_movies")
 GRP_LNK = environ.get('GRP_LNK', 'https://t.me/geeky_movies')
 CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/geeky_movies')
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/geeky_movies')
