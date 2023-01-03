@@ -127,8 +127,8 @@ class Bot(Client):
             if  not await get_user_join(event.sender_id):
                 haha = await event.reply(f'''**Hey! {event.sender.first_name} 😃**
 **You Have To Join Our Update Channel To Use Me ✅**
-**Click Below Button To Join Now.👇🏻**''', buttons=Button.url('🍿Updates Channel🍿', f'https://t.me/{Config.UPDATES_CHANNEL_USERNAME}'))
-                await asyncio.sleep(Config.AUTO_DELETE_TIME)
+**Click Below Button To Join Now.👇🏻**''', buttons=Button.url('🍿Updates Channel🍿', f'https://t.me/{UPDATES_CHANNEL_USERNAME}'))
+                await asyncio.sleep(DELETE_TIME)
                 return await haha.delete()
 
             args = event.text
@@ -151,9 +151,9 @@ class Bot(Client):
                 if group_info["has_access"] and group_info["db_channel"] and await db.is_group_verified(str(event.chat_id).replace("-100", "")):
                     CHANNEL_ID = group_info["db_channel"]
                 else:
-                    CHANNEL_ID = Config.CHANNEL_ID
+                    CHANNEL_ID = CHANNEL_ID
             else:
-                CHANNEL_ID = Config.CHANNEL_ID
+                CHANNEL_ID = CHANNEL_ID
 
 
             async for i in AsyncIter(re.sub("__|\*", "", args).split()):
@@ -162,7 +162,7 @@ class Bot(Client):
                     search_msg = client.iter_messages(CHANNEL_ID, limit=5, search=i)
                     search.append(search_msg)
 
-            username = Config.UPDATES_CHANNEL_USERNAME
+            username = UPDATES_CHANNEL_USERNAME
             answer = f'**Join** [@{username}](https://telegram.me/{username}) \n\n'
 
             c = 0
@@ -192,13 +192,13 @@ class Bot(Client):
 
                 await txt.delete()
                 result = await event.reply(answer, buttons=newbutton, link_preview=False)
-                await asyncio.sleep(Config.AUTO_DELETE_TIME)
+                await asyncio.sleep(DELETE_TIME)
                 await event.delete()
                 return await result.delete()
             else:
                 pass
 
-            answer += f"\n\n**Uploaded By @{Config.UPDATES_CHANNEL_USERNAME}**"
+            answer += f"\n\n**Uploaded By @{UPDATES_CHANNEL_USERNAME}**"
             answer = await replace_username(answer)
             html_content = await markdown_to_html(answer)
             html_content = await make_bold(html_content)
@@ -206,7 +206,7 @@ class Bot(Client):
             tgraph_result = await telegraph_handler(
                 html=html_content,
                 title=event.text,
-                author=Config.BOT_USERNAME
+                author=BOT_USERNAME
             )
             message = f'**Click Here 👇 For "{event.text}"**\n\n[🍿🎬 {str(event.text).upper()}\n🍿🎬 {str("Click me for results").upper()}]({tgraph_result})'
 
@@ -216,7 +216,7 @@ class Bot(Client):
             await txt.delete()
             await asyncio.sleep(0.5)
             result = await event.reply(message, buttons=newbutton, link_preview=False)
-            await asyncio.sleep(Config.AUTO_DELETE_TIME)
+            await asyncio.sleep(DELETE_TIME)
         # await event.delete()
             return await result.delete()
 
@@ -224,7 +224,7 @@ class Bot(Client):
             print(e)
             await txt.delete()
             result = await event.reply("I am Unable Search,Please Search In @PostSearchBOT🙏")
-            await asyncio.sleep(Config.AUTO_DELETE_TIME)
+            await asyncio.sleep(DELETE_TIME)
             await event.delete() 
             return await result.delete()
 
@@ -235,10 +235,10 @@ class Bot(Client):
 
 # Bot Client for Inline Search
     Bot = Client(
-        session_name=Config.BOT_SESSION_NAME,
-        api_id=Config.API_ID,
-        api_hash=Config.API_HASH,
-        bot_token=Config.BOT_TOKEN,
+        session_name=BOT_SESSION_NAME,
+        api_id=API_ID,
+        api_hash=API_HASH,
+        bot_token=BOT_TOKEN,
         plugins=dict(root="plugins")
     )
                 
