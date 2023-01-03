@@ -37,19 +37,19 @@ TIMEZONE = (os.environ.get("TIMEZONE", "Asia/Kolkata"))
 
 # Bot Client for Inline Search
 Bot = Client(
-    name=BOT_SESSION_NAME,
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN
+    def __init__(self):
+        super().__init__(
+            name=SESSION,
+            api_id=API_ID,
+            api_hash=API_HASH,
+            bot_token=BOT_TOKEN,
+            workers=50,
+            plugins={"root": "CYNITE"},
+            sleep_threshold=5,
+        )
 )
 
-# User Client for Searching in Channel.
-User = Client(
-
-    api_id=API_ID,
-    api_hash=API_HASH
-)
-
+# User Client for Searching in Channe
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(_, event: Message):
 	await event.reply_photo("https://telegra.ph/file/165941ae764a56d6d9c89.jpg",
