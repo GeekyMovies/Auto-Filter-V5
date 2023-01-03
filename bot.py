@@ -115,7 +115,7 @@ class Bot(Client):
 				parse_mode="html"
 		)
 		elif "Help_msg" in cb_data:
-            		await cmd.message.edit(
+			await cmd.message.edit(
 				text=ABOUT_HELP_TEXT,
 				disable_web_page_preview=True,
 				reply_markup=InlineKeyboardMarkup(
