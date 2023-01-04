@@ -18,12 +18,6 @@ API_HASH = environ.get('API_HASH', '2a1366013eca4256bce853346dbcda49')
 BOT_TOKEN = environ.get('BOT_TOKEN', "5823060125:AAHQGGkl7MGCJcz42n0taJBik2o9W45uHig")
 BOT_USERNAME = environ.get("BOT_USERNAME", "geekyofficialbot")
 BOT_SESSION_NAME = environ.get("BOT_SESSION_NAME", "geekybot")
-
-START_PHOTO = os.getenv("START_PHOTO", "https://telegra.ph/file/7d357b72c29a6aa21fb78.jpg")
-HOME_TEXT = os.getenv("HOME_TEXT", """ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ➕"""
-
-
-
 UPDATES_CHANNEL = environ.get("UPDATES_CHANNEL", "-1001249072794")
 
 LOG_CHANNEL = int(environ.get("LOG_CHANNEL", "-1001796458234"))
