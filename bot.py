@@ -3,14 +3,11 @@ from telethon import Button
 from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME, UPDATES_CHANNEL, FORCE_SUB, DELETE_TIME
 from pyrogram import Client, __version__
 import asyncio
-from telethon import TelegramClient
-from telethon.sessions import StringSession
 from plugins.tgraph import *
 from helpers import *
-from telethon import TelegramClient, events
+
 import urllib.parse
-from telethon.errors import UserNotParticipantError
-from telethon.tl.functions.channels import GetParticipantRequest
+
 
 
 import re
