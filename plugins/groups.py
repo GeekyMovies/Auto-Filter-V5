@@ -1,11 +1,11 @@
 from datetime import datetime
-from configs import Config
+from info import ADMINS
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from TeamTeleRoid.database import db
 
 
-@Client.on_message(filters.command("deny_access") & filters.private & filters.chat(Config.BOT_OWNER))
+@Client.on_message(filters.command("deny_access") & filters.private & filters.chat(ADMINS))
 async def dbdeny_access_cmd_handler(c:Client,query: Message):
     print(True)
     try:
@@ -17,7 +17,7 @@ async def dbdeny_access_cmd_handler(c:Client,query: Message):
         print(e)
 
 
-@Client.on_message(filters.command("give_access") & filters.private & filters.chat(Config.BOT_OWNER))
+@Client.on_message(filters.command("give_access") & filters.private & filters.chat(ADMINS))
 async def give_access_cmd_handler(_, m: Message):
     if len(m.command) == 3:
         group_id = int(m.command[1])
