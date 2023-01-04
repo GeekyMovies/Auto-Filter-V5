@@ -1,13 +1,3 @@
-from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME, START_MSG, ABOUT_HELP_TEXT
-from pyrogram import Client, filters, idle
-from pyrogram.errors import QueryIdInvalid
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InlineQuery, InlineQueryResultArticle, \
-    InputTextMessageContent
-import asyncio
-
-
-#My import 
-
 import os
 import math
 import logging
@@ -35,128 +25,93 @@ from pyrogram import types
 LOGGER = logging.getLogger(__name__)
 TIMEZONE = (os.environ.get("TIMEZONE", "Asia/Kolkata"))
 
-# Bot Client for Inline Search
 class Bot(Client):
-	def __init__(self):
-		super().__init__(
-			name=SESSION,
-			api_id=API_ID,
-			api_hash=API_HASH,
-			bot_token=BOT_TOKEN,
-			workers=50,
-			plugins={"root": "CYNITE"},
-			sleep_threshold=5,
+
+    def __init__(self):
+        super().__init__(
+            name=SESSION,
+            api_id=API_ID,
+            api_hash=API_HASH,
+            bot_token=BOT_TOKEN,
+            workers=50,
+            plugins={"root": "CYNITE"},
+            sleep_threshold=5,
         )
 
+    async def start(self):
+        b_users, b_chats = await db.get_banned()
+        temp.BANNED_USERS = b_users
+        temp.BANNED_CHATS = b_chats
+        await super().start()
+        await Media.ensure_indexes()
+        me = await self.get_me()
+        temp.ME = me.id
+        temp.U_NAME = me.username
+        temp.B_NAME = me.first_name
+        temp.B_LINK = me.mention
+        self.username = '@' + me.username
+        curr = datetime.now(timezone(TIMEZONE))
+        date = curr.strftime('%d %B, %Y')
+        time = curr.strftime('%I:%M:%S %p')
+        app = web.AppRunner(await web_server())
+        await app.setup()
+        bind_address = "0.0.0.0"
+        await web.TCPSite(app, bind_address, PORT).start()
+        logging.info(f"{me.first_name} with for Pyrogram v{__version__} (Layer {layer}) started on {me.username}.")
+        logging.info(LOG_STR)
+        if LOG_CHANNEL:
+            try:
+                await self.send_message(LOG_CHANNEL, text=f"<b>{me.mention} Rᴇsᴛᴀʀᴛᴇᴅ !!\n\n📅 Dᴀᴛᴇ : <code>{date}</code>\n⏰ Tɪᴍᴇ : <code>{time}</code>\n🌐 Tɪᴍᴇᴢᴏɴᴇ : <code>{TIMEZONE}</code>\n\n🉐 Vᴇʀsɪᴏɴ : <code>v{__version__}</code></b>")
+            except Unauthorized:
+                LOGGER.warning("Bot isn't able to send message to LOG_CHANNEL")
+            except BadRequest as e:
+                LOGGER.error(e)
 
-# User Client for Searching in Channe
-	@Bot.on_message(filters.private & filters.command("start"))
-	async def start_handler(_, event: Message):
-		await event.reply_photo("https://telegra.ph/file/165941ae764a56d6d9c89.jpg",
-                                	caption=START_MSG.format(event.from_user.mention),
-                                	reply_markup=InlineKeyboardMarkup([
-                                    	[InlineKeyboardButton("Our Channel", url="https://t.me/cynitemovies"),
-                                    	 InlineKeyboardButton("Creator", url="https://t.me/Cyniteofficial")],
-                                    	[InlineKeyboardButton("Help", callback_data="Help_msg"),
-                                     	InlineKeyboardButton("About", callback_data="About_msg")]]))
+    async def stop(self, *args):
+        await super().stop()
+        logging.info("Bot stopped. Bye.")
 
-	@Bot.on_message(filters.private & filters.command("help"))
-	async def help_handler(_, event: Message):
-		await event.reply_text(ABOUT_HELP_TEXT.format(event.from_user.mention),
-			       	reply_markup=InlineKeyboardMarkup([
-            	[InlineKeyboardButton("Our Channel", url="https://t.me/iP_Movies"),
-             	InlineKeyboardButton("Our Group", url="https://t.me/iPopcornMovieGroup"), 
-             	InlineKeyboardButton("About", callback_data="About_msg")]
-        ])
-    )
+    async def iter_messages(
+        self,
+        chat_id: Union[int, str],
+        limit: int,
+        offset: int = 0,
+    ) -> Optional[AsyncGenerator["types.Message", None]]:
+        """Iterate through a chat sequentially.
+        This convenience method does the same as repeatedly calling :meth:`~pyrogram.Client.get_messages` in a loop, thus saving
+        you from the hassle of setting up boilerplate code. It is useful for getting the whole chat messages with a
+        single call.
+        Parameters:
+            chat_id (``int`` | ``str``):
+                Unique identifier (int) or username (str) of the target chat.
+                For your personal cloud (Saved Messages) you can simply use "me" or "self".
+                For a contact that exists in your Telegram address book you can use his phone number (str).
+                
+            limit (``int``):
+                Identifier of the last message to be returned.
+                
+            offset (``int``, *optional*):
+                Identifier of the first message to be returned.
+                Defaults to 0.
+        Returns:
+            ``Generator``: A generator yielding :obj:`~pyrogram.types.Message` objects.
+        Example:
+            .. code-block:: python
+                for message in app.iter_messages("pyrogram", 1, 15000):
+                    print(message.text)
+        """
 
-	@Bot.on_message(filters.incoming)
-	async def inline_handlers(_, event: Message):
-		if event.text == '/start':
-			return
-		answers = f'**📂 Results For ➠ {event.text} \n\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n➠ Type Only Movie Name With Correct Spelling.✍️\n➠ Add Year For Better Result.🗓️\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n\n**'
-		async for message in User.search_messages(chat_id=CHANNEL_ID, limit=50, query=event.text):
-			if message.text:
-				thumb = None
-				f_text = message.text
-				msg_text = message.text.html
-				if "|||" in message.text:
-					f_text = message.text.split("|||", 1)[0]
-					msg_text = message.text.html.split("|||", 1)[0]
-					answers += f'**🍿 Title ➠ ' + '' + f_text.split("\n", 1)[0] + '' + '\n\n📜 About ➠ ' + '' + f_text.split("\n", 2)[-1] + ' \n\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\nLink Will Auto Delete In 60Sec...⏰\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n\n**'
-					try:
-						msg = await event.reply_text(answers)
-						await asyncio.sleep(300)
-						await event.delete()
-						await msg.delete()
-					except:
-						print(f"[{BOT_SESSION_NAME}] - Failed to Answer - {event.from_user.first_name}")
+        current = offset
+        while True:
+            new_diff = min(200, limit - current)
+            if new_diff <= 0:
+                return
+            messages = await self.get_messages(chat_id, list(range(current, current+new_diff+1)))
+            for message in messages:
+                yield message
+                current +=1
 
 
-	@Bot.on_callback_query()
-	async def button(bot, cmd: CallbackQuery):
-        	cb_data = cmd.data
-        	if "About_msg" in cb_data:
-            		await cmd.message.edit(
-				text=ABOUT_BOT_TEXT,
-				disable_web_page_preview=True,
-				reply_markup=InlineKeyboardMarkup(
-				[
-					[
-						InlineKeyboardButton("Our Channel", url="https://t.me/cyniteMovies"),
-						InlineKeyboardButton("Join", url="https://t.me/Technicalcynite")
-					],
-					[
-						InlineKeyboardButton("Creator", url="https://t.me/cyniteofficial"),
-						InlineKeyboardButton("Home", callback_data="gohome")
-					]
-				]
-			),
-				parse_mode="html"
-			)
-			elif "Help_msg" in cb_data:
-				await cmd.message.edit(
-					text=ABOUT_HELP_TEXT,
-					disable_web_page_preview=True,
-					reply_markup=InlineKeyboardMarkup(
-				[
-					[
-						InlineKeyboardButton("About", callback_data="About_msg"),
-						InlineKeyboardButton("Our Channel", url="https://t.me/cyniteMovies")
-					], 
-                                        [
-						InlineKeyboardButton("Owner", url="https://t.me/cyniteofficial"),
-						InlineKeyboardButton("Home", callback_data="gohome")
-					]
-				]
-			),
-					parse_mode="html"
-				)
-		elif "gohome" in cb_data:
-            	await cmd.message.edit(
-				text=START_MSG.format(cmd.from_user.mention),
-				disable_web_page_preview=True,
-				reply_markup=InlineKeyboardMarkup(
-				[
-                                        [
-						InlineKeyboardButton("Help", callback_data="Help_msg"),
-						InlineKeyboardButton("About", callback_data="About_msg")
-					],
-					[
-						InlineKeyboardButton("Support", url="https://t.me/cyniteofficial"),
-						InlineKeyboardButton("Channel", url="https://t.me/cynitemovies")
-					]
-				]
-			),
-				parse_mode="html"
-		)
 
-# Start Clients
-Bot.start()
-User.start()
-# Loop Clients till Disconnects
-idle()
-# After Disconnects,
-# Stop Clients
-Bot.stop()
-User.stop()
+app = Bot()
+app.run()
