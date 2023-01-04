@@ -131,16 +131,16 @@ class Bot(Client):
                 current +=1
                 
     async def get_user_join(id):
-    if FORCE_SUB == "False":
-        return True
+        if FORCE_SUB == "False":
+            return True
 
-    ok = True
-    try:
-        await tbot(GetParticipantRequest(channel=int(UPDATES_CHANNEL), participant=id))
         ok = True
-    except UserNotParticipantError:
-        ok = False
-    return ok            
+        try:
+            await tbot(GetParticipantRequest(channel=int(UPDATES_CHANNEL), participant=id))
+            ok = True
+        except UserNotParticipantError:
+            ok = False
+        return ok            
 
     @tbot.on(events.NewMessage(incoming=True))
     async def message_handler(event):
