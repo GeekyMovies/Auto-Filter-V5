@@ -1,9 +1,9 @@
 from TeamTeleRoid.database import db
-from configs import Config
+from info import ADMINS
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-@Client.on_message(filters.command("connect") & filters.chat(Config.BOT_OWNER) & filters.private)
+@Client.on_message(filters.command("connect") & filters.chat(ADMINS) & filters.private)
 async def connnect_group(c: Client, m: Message):
 
     if len(m.command) == 1:
@@ -21,7 +21,7 @@ async def connnect_group(c: Client, m: Message):
 
 
 
-@Client.on_message(filters.command("disconnect") & filters.chat(Config.BOT_OWNER) & filters.private)
+@Client.on_message(filters.command("disconnect") & filters.chat(ADMINS) & filters.private)
 async def disconnnect_group(c: Client, m: Message):
 
     if len(m.command) == 1:
