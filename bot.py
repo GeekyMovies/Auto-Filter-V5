@@ -1,18 +1,14 @@
 
 
 from os import link
-from telethon import Button
-from configs import Config
+
 from pyrogram import Client, idle
 import asyncio
-from telethon import TelegramClient
-from telethon.sessions import StringSession
+
 from plugins.tgraph import *
 from helpers import *
-from telethon import TelegramClient, events
 import urllib.parse
-from telethon.errors import UserNotParticipantError
-from telethon.tl.functions.channels import GetParticipantRequest
+
 import re
 tbot = TelegramClient('mdisktelethonbot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
