@@ -11,21 +11,19 @@ logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("imdbpy").setLevel(logging.ERROR)
 
-
 from pyrogram.errors import BadRequest, Unauthorized
 from datetime import datetime
 from pytz import timezone
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
-from database.users_chats_db import db 
+from database.users_chats_db import db
+from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT
 from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
 LOGGER = logging.getLogger(__name__)
 TIMEZONE = (os.environ.get("TIMEZONE", "Asia/Kolkata"))
-
-
 
 class Bot(Client):
 
@@ -102,7 +100,6 @@ class Bot(Client):
                 for message in app.iter_messages("pyrogram", 1, 15000):
                     print(message.text)
         """
-
         current = offset
         while True:
             new_diff = min(200, limit - current)
@@ -111,29 +108,8 @@ class Bot(Client):
             messages = await self.get_messages(chat_id, list(range(current, current+new_diff+1)))
             for message in messages:
                 yield message
-                current +=1
-                
-   
+                current += 1
+
+
 app = Bot()
 app.run()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
