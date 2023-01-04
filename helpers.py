@@ -1,5 +1,5 @@
 import re
-from configs import Config
+from info import UPDATES_CHANNEL_USERNAME, MDISK_API
 import json
 from pyrogram import Client
 from pyrogram.types import Message
@@ -10,7 +10,7 @@ import requests
 async def replace_username(text):
 	usernames = re.findall("([@#][A-Za-z0-9_]+)", text)
 	async for i in AsyncIter(usernames):
-		text = text.replace(i, f"@{Config.UPDATES_CHANNEL_USERNAME}")
+		text = text.replace(i, f"@{UPDATES_CHANNEL_USERNAME}")
 	return text
 
 
@@ -174,8 +174,8 @@ class AsyncIter:
 
 # ################################################### Mdisk Convertor #########################################################
         
-# async def get_mdisk(link, api=Config.MDISK_API):
-async def get_mdisk(link, api=Config.MDISK_API):
+# async def get_mdisk(link, api=MDISK_API):
+async def get_mdisk(link, api=MDISK_API):
 	url = 'https://diskuploader.mypowerdisk.com/v1/tp/cp'
 	param = {'token': api, 'link': link
 			 }
@@ -187,7 +187,7 @@ async def get_mdisk(link, api=Config.MDISK_API):
 		pass
 	return link
 
-async def replace_mdisk_link(text, api=Config.MDISK_API):
+async def replace_mdisk_link(text, api=MDISK_API):
     links = re.findall(r'https?://mdisk.me[^\s]+', text)
     async for link in AsyncIter(links):
         mdisk_link = await get_mdisk(link, api)
