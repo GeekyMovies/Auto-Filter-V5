@@ -36,20 +36,7 @@ async def gen_link_s(bot, message):
     outstr = base64.urlsafe_b64encode(string.encode("ascii")).decode().strip("=")
     await message.reply(f"Here is your Link:\nhttps://t.me/{temp.U_NAME}?start={outstr}")
    
-@Client.on_message(filters.command("Mdisk") & filters.private)
-async def mdisk_handler(_, event: Message):
-    await event.reply_text(Config.ABOUT_MDISK_TEXT.format(event.from_user.mention),
-        reply_markup=InlineKeyboardMarkup([
-            [
-            InlineKeyboardButton('➕ Add Me To Your Groups ➕', url=f'http://t.me/{Config.BOT_USERNAME}?startgroup=true')
-            ],
 
-             [InlineKeyboardButton("TeraBox", callback_data="Terabox_msg"),
-             InlineKeyboardButton('Watch Video', url='https://t.me/CyniteBackup/17')
-             ]
-        ])
-    )
-    
     
 @Client.on_message(filters.command(['batch', 'pbatch']) & filters.create(allowed))
 async def gen_link_batch(bot, message):
