@@ -256,8 +256,8 @@ class Bot(Client):
             return await result.delete()
     
     async def escape_url(str):
-    escape_url = urllib.parse.quote(str)
-    return escape_url 
+        escape_url = urllib.parse.quote(str)
+        return escape_url 
 
 app = Bot()
 app.run()
