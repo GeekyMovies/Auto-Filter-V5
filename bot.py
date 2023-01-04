@@ -1,5 +1,5 @@
 from os import link
-from telethon import Button
+
 from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME, UPDATES_CHANNEL, FORCE_SUB, DELETE_TIME
 from pyrogram import Client, __version__
 import asyncio
