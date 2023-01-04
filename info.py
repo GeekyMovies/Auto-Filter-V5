@@ -18,6 +18,21 @@ API_HASH = environ.get('API_HASH', '2a1366013eca4256bce853346dbcda49')
 BOT_TOKEN = environ.get('BOT_TOKEN', "5823060125:AAHQGGkl7MGCJcz42n0taJBik2o9W45uHig")
 BOT_USERNAME = environ.get("BOT_USERNAME", "geekyofficialbot")
 BOT_SESSION_NAME = environ.get("BOT_SESSION_NAME", "geekybot")
+
+
+#remove
+UPDATES_CHANNEL = environ.get("UPDATES_CHANNEL", "-1001249072794")
+
+LOG_CHANNEL = int(environ.get("LOG_CHANNEL", "-1001796458234"))
+RESULTS_COUNT = int(environ.get("RESULTS_COUNT", 20))
+BROADCAST_AS_COPY = environ.get("BROADCAST_AS_COPY", "True")
+
+FORCE_SUB = environ.get("FORCE_SUB", "False")
+
+MDISK_API = environ.get("MDISK_API", "Qu7jX9V0Sn3q1JHdxjPp")
+VERIFIED_TIME  = int(environ.get("VERIFIED_TIME", "31"))
+
+
 ABOUT_BOT_TEXT = """<b>This is Mdisk Search Bot.
 🤖 My Name: <a href='https://t.me/cyniteofficial'>Mdisk Search Robot</a>
 📝 Language : <a href='https://www.python.org'> Python V3</a>
