@@ -1,17 +1,25 @@
-from os import link
 
-from info import SESSION, API_ID, API_HASH, BOT_TOKEN, LOG_STR, LOG_CHANNEL, PORT, CHANNELS, UPDATES_CHANNEL_USERNAME,BOT_USERNAME, BOT_SESSION_NAME, UPDATES_CHANNEL, FORCE_SUB, DELETE_TIME
-from pyrogram import Client, __version__
+
+from os import link
+from telethon import Button
+from configs import Config
+from pyrogram import Client, idle
 import asyncio
+from telethon import TelegramClient
+from telethon.sessions import StringSession
 from plugins.tgraph import *
 from helpers import *
-
+from telethon import TelegramClient, events
 import urllib.parse
-
-
-
+from telethon.errors import UserNotParticipantError
+from telethon.tl.functions.channels import GetParticipantRequest
 import re
 tbot = TelegramClient('mdisktelethonbot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
+
+
+
+
+
 import os
 import math
 import logging
