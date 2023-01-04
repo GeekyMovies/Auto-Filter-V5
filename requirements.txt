@@ -10,7 +10,7 @@ IMDbPY==2022.7.9
 psutil
 aiohttp
 pytz
-https://github.com/Mahesh0253/pyrogram/archive/inline.zip
+
 TgCrypto
 motor
 aiofiles
